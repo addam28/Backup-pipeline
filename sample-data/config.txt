@@ -1,0 +1,3 @@
+Application=BackupPipeline
+Version=1.0
+Environment=Development

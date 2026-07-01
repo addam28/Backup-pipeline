@@ -1,0 +1,9 @@
+Order ID: 1001
+Customer: Adarsh
+Product: Laptop
+Amount: 55000
+
+Order ID: 1002
+Customer: Rahul
+Product: Mouse
+Amount: 700
