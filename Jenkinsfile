@@ -23,6 +23,8 @@ pipeline {
                 docker start -a temp-backup-container
                 docker cp temp-backup-container:/data/backups/. ./backups
                 docker rm temp-backup-container
+                LATEST_BACKUP=$(ls -t backups/*.tar.gz | head -n 1)
+echo "SIMULATING CORRUPTION FOR TESTING" >> "$LATEST_BACKUP"
                 '''
             }
         }
