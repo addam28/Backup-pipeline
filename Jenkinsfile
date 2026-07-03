@@ -21,11 +21,21 @@ pipeline {
                 sh '''
                 docker create --name temp-backup-container backup-pipeline-image
                 docker start -a temp-backup-container
-                docker cp temp-backup-container:/data/backups ./backups
+               docker cp temp-backup-container:/data/backups/. ./backups
                 docker rm temp-backup-container
                 '''
             }
         }
+        stage('Verify Backup Integrity') {
+    steps {
+        sh '''
+        cd backups
+        LATEST_BACKUP=$(ls -t *.tar.gz | head -n 1)
+        echo "Verifying: $LATEST_BACKUP"
+        sha256sum -c "$LATEST_BACKUP.sha256"
+        '''
+    }
+}
 
         stage('Verify Backup') {
             steps {

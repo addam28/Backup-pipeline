@@ -22,3 +22,10 @@ echo "Backup file: $BACKUP_FILE"
 
 # Show backup file details
 ls -lh "$BACKUP_FILE"
+cd "$BACKUP_DIR"
+
+sha256sum "$(basename "$BACKUP_FILE")" > "$(basename "$BACKUP_FILE").sha256"
+
+echo "Checksum generated: $(basename "$BACKUP_FILE").sha256"
+
+cat "$(basename "$BACKUP_FILE").sha256"
