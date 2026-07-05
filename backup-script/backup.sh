@@ -29,3 +29,21 @@ sha256sum "$(basename "$BACKUP_FILE")" > "$(basename "$BACKUP_FILE").sha256"
 echo "Checksum generated: $(basename "$BACKUP_FILE").sha256"
 
 cat "$(basename "$BACKUP_FILE").sha256"
+
+# Record metrics for Prometheus
+METRICS_FILE="$BACKUP_DIR/metrics.prom"
+
+BACKUP_STATUS=1
+BACKUP_SIZE=$(stat -c%s "$(basename "$BACKUP_FILE")" 2>/dev/null || echo 0)
+BACKUP_FILES=$(find "$BACKUP_DIR" -name "*.tar.gz" | wc -l)
+END_TIME=$(date +%s)
+
+cat > "$METRICS_FILE" << EOF
+backup_last_run_timestamp $END_TIME
+backup_last_success $BACKUP_STATUS
+backup_size_bytes $BACKUP_SIZE
+backup_files $BACKUP_FILES
+EOF
+
+echo "Metrics written to $METRICS_FILE"
+cat "$METRICS_FILE"
